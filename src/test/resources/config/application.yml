@@ -13,13 +13,6 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-eureka:
-  client:
-    enabled: false
-  instance:
-    appname: jhipster
-    instanceId: jhipster:${spring.application.instance-id:${random.value}}
-
 spring:
   application:
     name: jhipster
@@ -31,7 +24,7 @@ spring:
     elasticsearch:
       properties:
         path:
-          home: build/elasticsearch
+          home: target/elasticsearch
   mail:
     host: localhost
   main:
@@ -84,7 +77,7 @@ jhipster:
     authentication:
       jwt:
         # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
-        base64-secret: MWI4NjJiODY4ZmE5MjE1ZDZhN2MzZWQzNmEzYzRjZjFhMzk1NWY0MTA3ZjIxM2E1NWU2NGExN2M3ZDNlMDFjMTUyZjdiZDg3ZTllNTRhMGI1NDJkYTkzMmNhNmVhMTc0NTY0ODA4ZGFjZjUyYjMzOTdiOGE2MWIwZGNmMGFhZGI=
+        base64-secret: NjYxYzI4Njg2ODdiM2I2MDg3OTNiNDZhYjU0ODUwZDU2Mjc2YTA4MWJlOTk1MTU1NWI0MTUxNjVlZWY3NjIyYTFiNjI5ZWJkY2E5YjFhN2RkMGI5ZWE3ZjQ4NTA3NjFlNTM5ZWVlZTdkMjUwNDk0YTVhMzc2ZDQ2ZGVmODliZDU=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
   metrics:

@@ -2,16 +2,30 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = {
-  parseVersion,
-  root,
-  isExternalLib
+    parseVersion,
+    root,
+    isExternalLib
 };
 
-// Returns the second occurrence of the version number from `build.gradle` file
+const parseString = require('xml2js').parseString;
+// return the version number from `pom.xml` file
 function parseVersion() {
-  const versionRegex = /^version\s*=\s*[',"]([^',"]*)[',"]/gm; // Match and group the version number
-  const buildGradle = fs.readFileSync('build.gradle', 'utf8');
-  return versionRegex.exec(buildGradle)[1];
+    let version = null;
+    const pomXml = fs.readFileSync('pom.xml', 'utf8');
+    parseString(pomXml, (err, result) => {
+        if (err) {
+            throw new Error('Failed to parse pom.xml: ' + err);
+        }
+        if (result.project.version && result.project.version[0]) {
+            version = result.project.version[0];
+        } else if (result.project.parent && result.project.parent[0] && result.project.parent[0].version && result.project.parent[0].version[0]) {
+            version = result.project.parent[0].version[0];
+        }
+    });
+    if (version === null) {
+        throw new Error('pom.xml is malformed. No version is defined');
+    }
+    return version;
 }
 
 const _root = path.resolve(__dirname, '..');
@@ -22,9 +36,9 @@ function root(args) {
 }
 
 function isExternalLib(module, check = /node_modules/) {
-  const req = module.userRequest;
-  if (typeof req !== 'string') {
-    return false;
-  }
-  return req.search(check) >= 0;
+    const req = module.userRequest;
+    if (typeof req !== 'string') {
+        return false;
+    }
+    return req.search(check) >= 0;
 }
